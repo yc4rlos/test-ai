@@ -1,0 +1,30 @@
+services:
+  cep-tool-api:
+    build:
+      context: ./cep-tool-api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./cep-tool-api:/app
+    ports:
+      - "8001:8000"
+    networks:
+      - api-network
+
+  llm-api:
+    build:
+      context: ./llm-api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./llm-api:/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - cep-tool-api
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    driver: bridge
